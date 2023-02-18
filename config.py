@@ -97,9 +97,11 @@ keys = [
     Key([], "XF86MonBrightnessDown", lazy.spawn("brightnessctl s 5%-"), desc="descrease brightness by 10%"),
 
     # Volume control
-    Key([], "XF86AudioRaiseVolume", lazy.spawn("pactl set-sink-volume @DEFAULT_SINK@ +5%"), desc="incesase brightness by 10%"),
-    Key([], "XF86AudioLowerVolume", lazy.spawn("pactl set-sink-volume @DEFAULT_SINK@ -5%"), desc="descrease brightness by 10%"),
-    Key([], "XF86AudioMute", lazy.spawn("amixer set Master toggle"), desc="descrease brightness by 10%"),
+    #Key([], "XF86AudioRaiseVolume", lazy.spawn("pactl set-sink-volume @DEFAULT_SINK@ +5%"), desc="incesase brightness by 10%"),
+    #Key([], "XF86AudioLowerVolume", lazy.spawn("pactl set-sink-volume @DEFAULT_SINK@ -5%"), desc="descrease brightness by 10%"),
+    Key([], "XF86AudioRaiseVolume", lazy.spawn("pamixer -i 5"), desc="incesase brightness by 10%"),
+    Key([], "XF86AudioLowerVolume", lazy.spawn("pamixer -d 5"), desc="descrease brightness by 10%"),
+    Key([], "XF86AudioMute", lazy.spawn("pamixer -t"), desc="descrease brightness by 10%"),
 
 
     # Launch pcmanfm
@@ -230,19 +232,22 @@ layouts = [
     # layout.Zoomy(),
 ]
 
-colors = [["#282c34", "#282c34"], # panel background
-          ["#3d3f4b", "#434758"], # background for current screen tab
-          ["#ffffff", "#ffffff"], # font color for group names
-          ["#ff5555", "#ff5555"], # border line color for current tab
-          ["#74438f", "#74438f"], # border line color for 'other tabs' and color for 'odd widgets'
-          ["#4f76c7", "#4f76c7"], # color for the 'even widgets'
-          ["#e1acff", "#e1acff"], # window name
-          ["#ecbbfb", "#ecbbfb"]] # backbround for inactive screens
+colors = [["#282c34", "#282c34"],
+          ["#1c1f24", "#1c1f24"],
+          ["#dfdfdf", "#dfdfdf"],
+          ["#ff6c6b", "#ff6c6b"],
+          ["#98be65", "#98be65"],
+          ["#da8548", "#da8548"],
+          ["#51afef", "#51afef"],
+          ["#c678dd", "#c678dd"],
+          ["#46d9ff", "#46d9ff"],
+          ["#a9a1e1", "#a9a1e1"]]
 
 widget_defaults = dict(
     font="Source Code Pro",
     fontsize=12,
     padding=2,
+    background=colors[1]
 )
 extension_defaults = widget_defaults.copy()
 
@@ -256,16 +261,16 @@ screens = [
                     foreground = colors[2],
                     background = colors[0]),
                 widget.GroupBox(
-                    font = "Ubuntu Bold",
+                    font = "Source Code Pro",
                     fontsize=14,
                     margin_y = 3,
                     margin_x = 0,
                     padding_y = 5,
                     padding_x = 3,
                     borderwidth = 3,
-                    active = colors[3],
+                    active = colors[2],
                     inactive = colors[7],
-                    rounded = False,
+                    rounded = True,
                     highlight_color = colors[1],
                     highlight_method = "line",
                     this_current_screen_border = colors[6],
@@ -275,7 +280,7 @@ screens = [
                     foreground = colors[2],
                     background = colors[0]),
                 widget.Prompt(
-                    font = 'Ubuntu Mono',
+                    font = 'Source Code Pro',
                     padding = 10,
                     fontsize = 14,),
                 widget.Sep(
@@ -302,14 +307,14 @@ screens = [
                 widget.TextBox(
                     text = 'Uptime:',
                     background = colors[5],
-                    foreground = colors[2],
+                    foreground = colors[1],
                     fontsize = 14
                 ),
                 widget.GenPollText(
                     update_interval = 1,
                     func = lambda: subprocess.check_output(os.path.expanduser(home + "/.local/bin/upt")).decode('utf-8').strip(),
                     background = colors[5],
-                    foreground = colors[2],
+                    foreground = colors[1],
                     fontsize = 14,),
                widget.TextBox(
                     text = '',
@@ -318,7 +323,7 @@ screens = [
                     padding = 0,
                     fontsize = 37),
                 widget.CPU(
-                    foreground = colors[2],
+                    foreground = colors[1],
                     background = colors[4],
                     threshold = 98,
                     padding = 5,
@@ -333,10 +338,12 @@ screens = [
                 widget.CheckUpdates(
                     displaay_format = '{updates}',
                     distro = 'Arch_checkupdates',
+                    color_have_update=colors[3],
+                    color_no_update=colors[1],
                     mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn(terminal + ' -e sudo pacman -Syu')},
                     update_interval = 3600,
                     background = colors[5],
-                    foreground = colors[2],
+                    foreground = colors[1],
                     fontsize = 14,),
                 widget.TextBox(
                     text = '',
@@ -348,7 +355,8 @@ screens = [
                     update_interval = 1,
                     func = lambda: subprocess.check_output(os.path.expanduser(home + "/.local/bin/vol")).decode('utf-8').strip(),
                     background = colors[4],
-                    foreground = colors[2],
+                    foreground = colors[1],
+                    fontsize = 14,
                 ),
                 widget.TextBox(
                     text = '',
@@ -359,13 +367,13 @@ screens = [
                 widget.TextBox(
                     text = 'Barightness:',
                     background = colors[5],
-                    foreground = colors[2],
+                    foreground = colors[1],
                     fontsize = 14,
                 ),
                 widget.Backlight(
                     backlight_name = 'amdgpu_bl1',
                     format = '{percent:2.0%}',
-                    foreground = colors[2],
+                    foreground = colors[1],
                     background = colors[5],
                     fontsize = 14,
                     ),
@@ -379,7 +387,7 @@ screens = [
                 widget.TextBox(
                     text = 'Bat:',
                     background = colors[4],
-                    foreground = colors[2],
+                    foreground = colors[1],
                     fontsize = 14,
                 ),
                 widget.Battery(
@@ -387,7 +395,7 @@ screens = [
                     discharge_char = 'DIS',
                     update_interval = 0.2,
                     format = '{char}->{percent:2.0%}',
-                    foreground = colors[2],
+                    foreground = colors[1],
                     background = colors[4],
                     fontsize = 14,
                     ),
@@ -401,7 +409,7 @@ screens = [
                 widget.Clock(
                     format="%a, %b %d %G, %I:%M %p",
                     background=colors[5],
-                    foreground=colors[2],
+                    foreground=colors[1],
                     fontsize=14,
                 ),
                 widget.TextBox(
@@ -412,7 +420,7 @@ screens = [
                     fontsize = 37
                 ),
                 widget.CurrentLayout(
-                    foreground=colors[2],
+                    foreground=colors[1],
                     background=colors[4],
                     padding=5,
                     fontsize=14,
@@ -452,10 +460,10 @@ floating_layout = layout.Floating(
         Match(wm_class="maketag"),  # gitk
         Match(wm_class="ssh-askpass"),  # ssh-askpass
         Match(title="branchdialog"),  # gitk
-        Match(title="pinentry"),  # GPG key password entry
+        Match(wm_class="pinentry-gtk-2"),  # GPG key password entry
     ]
 )
-auto_fullscreen = True
+auto_fullscreen = False
 focus_on_window_activation = "smart"
 reconfigure_screens = True
 
