@@ -28,6 +28,7 @@ from libqtile import bar, layout, widget, hook
 from libqtile.config import Click, Drag, Group, Key, Match, Screen, KeyChord
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
+from libqtile import qtile
 
 import os
 import subprocess
@@ -260,6 +261,11 @@ screens = [
                     padding = 6,
                     foreground = colors[2],
                     background = colors[0]),
+                widget.Image(
+                    filename = '~/.config/qtile/icons/python.png',
+                    scale = 'False',
+                    mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn(terminal)}
+                ),
                 widget.GroupBox(
                     font = "Source Code Pro",
                     fontsize=14,
