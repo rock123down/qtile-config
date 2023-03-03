@@ -111,6 +111,10 @@ keys = [
     # Launch qutebrowser
     Key([mod, "shift"], "b", lazy.spawn("qutebrowser"), desc="launch browser"),
 
+    # Disable Touchpad
+    Key([mod], "t", lazy.spawn(home + "/.local/bin/touchpad"), desc="Turn On TouchPad"),
+    Key([mod, "shift"], "t", lazy.spawn(home + "/.local/bin/touchpadOff"), desc="Turn Off TouchPad"),
+
     # Launch Brvae
     Key([mod], "b", lazy.spawn("firefox"), desc="Launch Firefox Browser"),
 
@@ -118,8 +122,8 @@ keys = [
     Key([mod, "shift"], "p", lazy.spawn("dmenu_run -p 'Run: '"),
         desc='Run Launcher'),
 
-    # Launch slock
-    Key([mod], "l", lazy.spawn("slock"), desc='Run slock'),
+    # Launch archlinux-logout
+    Key([mod], "l", lazy.spawn("archlinux-logout"), desc='Run archlinux-logout'),
 
     # Emacs programs launched using the key chord mod+e followed by 'key'
     KeyChord([mod], "e", [

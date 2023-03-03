@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+synclient TouchpadOff=0
+notify-send "TouchPad" "TouchPad is Turned ON"
